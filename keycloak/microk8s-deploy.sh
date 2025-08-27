@@ -35,6 +35,11 @@ microk8s kubectl create namespace traefik --dry-run=client -o yaml | microk8s ku
 
 # Step 1: Deploy PostgreSQL Database
 echo "📊 Deploying PostgreSQL database..."
+echo "⏳ Pre-pulling PostgreSQL image to avoid timeout issues..."
+if ! microk8s ctr image pull docker.io/library/postgres:15 --timeout 600s; then
+    echo "⚠️  Image pull slow/failed, but proceeding with deployment..."
+    echo "💡 The deployment will retry automatically"
+fi
 cat <<EOF | microk8s kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
