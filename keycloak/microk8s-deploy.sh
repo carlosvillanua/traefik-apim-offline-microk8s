@@ -14,20 +14,13 @@ if ! microk8s status --wait-ready --timeout 30; then
     exit 1
 fi
 
-# Check and enable networking addon if needed
-echo "🔍 Checking networking configuration..."
-if ! microk8s status | grep -q "kube-ovn.*enabled"; then
-    echo "🌐 Enabling kube-ovn networking addon..."
-    microk8s enable kube-ovn
-    echo "⏳ Waiting for kube-ovn to be ready..."
-    if ! microk8s kubectl wait --for=condition=ready pod -l app=kube-ovn-cni -n kube-ovn --timeout=300s; then
-        echo "❌ kube-ovn failed to start. Check with: microk8s kubectl get pods -n kube-ovn"
-        exit 1
-    fi
-    echo "✅ Networking addon ready"
-else
-    echo "✅ Networking addon already enabled"
+# Check networking - MicroK8s should work with basic containerd networking
+echo "🔍 Checking basic connectivity..."
+if ! microk8s kubectl get nodes >/dev/null 2>&1; then
+    echo "❌ Cannot connect to cluster. Check MicroK8s status."
+    exit 1
 fi
+echo "✅ Cluster connectivity verified"
 
 # Step 0: Create required namespaces
 echo "📦 Creating required namespaces..."
