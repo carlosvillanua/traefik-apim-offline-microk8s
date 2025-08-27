@@ -14,6 +14,21 @@ if ! microk8s status --wait-ready --timeout 30; then
     exit 1
 fi
 
+# Check and enable networking addon if needed
+echo "🔍 Checking networking configuration..."
+if ! microk8s status | grep -q "kube-ovn.*enabled"; then
+    echo "🌐 Enabling kube-ovn networking addon..."
+    microk8s enable kube-ovn
+    echo "⏳ Waiting for kube-ovn to be ready..."
+    if ! microk8s kubectl wait --for=condition=ready pod -l app=kube-ovn-cni -n kube-ovn --timeout=300s; then
+        echo "❌ kube-ovn failed to start. Check with: microk8s kubectl get pods -n kube-ovn"
+        exit 1
+    fi
+    echo "✅ Networking addon ready"
+else
+    echo "✅ Networking addon already enabled"
+fi
+
 # Step 0: Create required namespaces
 echo "📦 Creating required namespaces..."
 microk8s kubectl create namespace traefik --dry-run=client -o yaml | microk8s kubectl apply -f -
