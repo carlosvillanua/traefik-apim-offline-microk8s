@@ -1,0 +1,73 @@
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPortalAuth
+metadata:
+  name: portal-auth
+  namespace: apps
+spec:
+  oidc:
+    issuerUrl: ${EXTERNAL_OIDC_ISSUER}
+    secretName: portal-auth-secret
+    claims:
+      groups: groups
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPortal
+metadata:
+  name: api-portal
+  namespace: apps
+spec:
+  title: Company API Portal
+  description: "Documentation for our APIs"
+  trustedUrls:
+    - ${TRUSTED_URL}/portal
+  auth:
+    name: portal-auth
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: portal-auth-secret
+  namespace: apps
+type: Opaque
+data:
+  clientId: dHJhZWZpaw==  # base64 encoded "traefik"
+  clientSecret: dHJhZWZpa19zZWNyZXQ=  # base64 encoded "traefik_secret"
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: weather-portal
+  namespace: apps
+  annotations:
+    hub.traefik.io/api-portal: api-portal@apps
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/portal`)
+      middlewares:
+        - name: stripprefix-portal
+          namespace: apps
+      kind: Rule
+      services:
+        - name: apiportal
+          namespace: traefik
+          port: 9903
+    - match: PathPrefix(`/callback`)
+      kind: Rule
+      services:
+        - name: apiportal
+          namespace: traefik
+          port: 9903
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: stripprefix-portal
+  namespace: apps
+spec:
+  stripPrefix:
+    prefixes:
+      - /portal
