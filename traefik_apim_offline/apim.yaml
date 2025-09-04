@@ -35,7 +35,7 @@ metadata:
   namespace: apps
 spec:
   appId: traefik
-  owner: "67f67907ee260b44336a952e"
+  owner: "${TRAEFIK_USER_ID}"
 
 ---
 apiVersion: hub.traefik.io/v1alpha1

@@ -8,6 +8,7 @@ spec:
     issuerUrl: ${EXTERNAL_OIDC_ISSUER}
     secretName: portal-auth-secret
     claims:
+      userId: sub
       groups: groups
 ---
 apiVersion: hub.traefik.io/v1alpha1

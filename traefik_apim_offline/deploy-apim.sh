@@ -7,6 +7,19 @@ echo "🚀 Deploying Traefik API Management..."
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Load Keycloak variables if available
+if [ -f "${SCRIPT_DIR}/.keycloak_vars" ]; then
+    echo "🔑 Loading Keycloak variables..."
+    source "${SCRIPT_DIR}/.keycloak_vars"
+    echo "✅ Loaded TRAEFIK_USER_ID: ${TRAEFIK_USER_ID}"
+else
+    echo "⚠️  No Keycloak variables found. Run deploy-keycloak.sh first or set TRAEFIK_USER_ID manually"
+    if [ -z "$TRAEFIK_USER_ID" ]; then
+        echo "❌ TRAEFIK_USER_ID is required for ManagedApplication"
+        exit 1
+    fi
+fi
+
 # Detect Kubernetes platform - simplified approach
 KUBECTL_CMD="microk8s kubectl"
 PLATFORM="microk8s"
@@ -100,7 +113,7 @@ microk8s kubectl wait --for=condition=ready pod -l app=weather-app -n apps --tim
 
 # Deploy API plans
 echo "📊 Deploying API plans..."
-microk8s kubectl apply -f "${SCRIPT_DIR}/apim.yaml"
+envsubst < "${SCRIPT_DIR}/apim.yaml" | microk8s kubectl apply -f -
 
 # Deploy API definition
 echo "🔗 Deploying API definition..."
