@@ -24,29 +24,22 @@ Deploying Traefik APIM on MicroK8s brings unique advantages for edge, developer,
 ![Traefik Offline APIM Architecture](images/traefik_apim_offline_arch.png)
 
 **Components:**
-- MicroK8s – Kubernetes cluster
-- Traefik Hub – Gateway & API Management
-- Keycloak – SSO / OAuth2 / JWT provider
-- Redis – Rate limiting & cache
-- Weather API – Demo service
+- [MicroK8s](https://microk8s.io/) – Kubernetes cluster
+- [k3d](https://k3d.io/) – Kubernetes cluster
+- [Traefik Hub](https://traefik.io/traefik-hub/) – API/AI Gateway & FullAPI Management
+- [Keycloak](https://www.keycloak.org/) – SSO / OAuth2 / JWT provider
+- [Redis](https://redis.io/) – Rate limiting
 
 ---
 
 This architecture delivers robust, cloud-native API management—**any hardware, any location, anytime, with zero cloud dependency, and fully automated through GitOps**.
 
-## Architecture
-
-- **MicroK8s** - Kubernetes cluster
-- **Traefik Hub** - API gateway & management
-- **Keycloak** - OAuth2/JWT authentication  
-- **Redis** - Rate limiting & caching
-- **Weather API** - Sample application
 
 ## Prerequisites
 
-For this demo I am using a macos machine, there could be some differences if you are using a different platform like fetching the IPs for the services or installing k3d and microk8s.
+For this deployment I am using a **macos** machine, there could be some differences if you are using a different platform like fetching the IPs for the services or installing k3d and microk8s.
 
-- Homebrew 
+- [Homebrew](https://brew.sh/)
 - `curl` installed
 
 ## Quick Start
