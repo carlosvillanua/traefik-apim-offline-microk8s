@@ -25,7 +25,7 @@ BASE_URL="http://${HOST_IP}:8090"
 ADMIN_TOKEN=$(curl -s "${BASE_URL}/realms/master/protocol/openid-connect/token" \
     -H "Content-Type: application/x-www-form-urlencoded" \
     -d "grant_type=password&client_id=admin-cli&username=admin&password=admin123" \
-    --max-time 15 | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])" 2>/dev/null || echo "")
+    --max-time 15 | grep -o '"access_token":"[^"]*' | cut -d'"' -f4 2>/dev/null || echo "")
 
 if [ -n "$ADMIN_TOKEN" ]; then
     # Create traefik client
@@ -69,7 +69,7 @@ if [ -n "$ADMIN_TOKEN" ]; then
         # Get user ID
         TRAEFIK_USER_ID=$(curl -s "${BASE_URL}/admin/realms/master/users?username=traefik" \
             -H "Authorization: Bearer $ADMIN_TOKEN" \
-            | python3 -c "import json,sys; data=json.load(sys.stdin); print(data[0]['id']) if data else exit(1)" 2>/dev/null)
+            | grep -o '"id":"[^"]*' | head -1 | cut -d'"' -f4 2>/dev/null)
         
         if [ -n "$TRAEFIK_USER_ID" ]; then
             echo "✅ User 'traefik@example.com' ready with ID: $TRAEFIK_USER_ID"
