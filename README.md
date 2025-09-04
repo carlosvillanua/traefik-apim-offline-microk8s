@@ -146,7 +146,7 @@ The output of the bash script will show you the urls to access the API portal, D
 **Keycloak Admin:** `admin` / `admin123`  
 **Redis:** `redis_password123`  
 **OAuth2 Client:** `traefik` / `traefik_secret`  
-**Test User:** `traefik` / `topsecretpassword`
+**Test User:** `traefik@example.com` / `topsecretpassword`
 
 ## Testing
 
@@ -162,7 +162,7 @@ echo "JWT Token obtained: ${JWT_TOKEN}"
 curl -H "Authorization: Bearer $JWT_TOKEN" "http://${VM_IP}:${TRAEFIK_PORT}/weather/"
 ```
 
-Open your Developer portal, login with your Keycloak user (admin/admin123) and test out your APIs using JWT authentication.
+Open your Developer portal, login with your Keycloak user (`traefik@example.com` / `topsecretpassword`) and test out your APIs using JWT authentication.
 
 ![image](images/keycloak_sso_login.png)
 ![image](images/traefik_portal.png)
