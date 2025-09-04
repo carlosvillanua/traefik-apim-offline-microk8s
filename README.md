@@ -21,7 +21,7 @@ Deploying Traefik APIM on MicroK8s brings unique advantages for edge, developer,
 
 ## Architecture Overview
 
-![Traefik Offline APIM Architecture](images/traefik_apim_offline_architecture.png)
+![Traefik Offline APIM Architecture](images/traefik_apim_offline_arch.png)
 
 **Components:**
 - MicroK8s – Kubernetes cluster
