@@ -72,8 +72,6 @@ echo "VM IP: ${VM_IP}"
 Get your free license from [traefik.io/traefik-hub](https://traefik.io/traefik-hub/), then deploy:
 
 ```bash
-# Create Traefik Hub license secret (replace YOUR_LICENSE_TOKEN with your actual token)
-# You can get a free license from: https://traefik.io/traefik-hub/
 export TRAEFIK_HUB_TOKEN=YOUR_LICENSE_TOKEN
 
 microk8s kubectl create namespace traefik --dry-run=client -o yaml | microk8s kubectl apply -f -

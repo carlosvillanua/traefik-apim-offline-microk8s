@@ -47,9 +47,9 @@ if [ -n "$ADMIN_TOKEN" ]; then
             }
         }" > /dev/null 2>&1 && echo "✅ Client 'traefik' created successfully" || echo "⚠️  Client creation failed or may already exist"
     
-    # Create traefik user
+    # Create traefik user and capture ID
     echo "Creating user 'traefik@example.com'..."
-    curl -s "${BASE_URL}/admin/realms/master/users" \
+    HTTP_STATUS=$(curl -s -w "%{http_code}" -o /dev/null "${BASE_URL}/admin/realms/master/users" \
         -H "Authorization: Bearer $ADMIN_TOKEN" \
         -H "Content-Type: application/json" \
         --max-time 10 \
@@ -63,7 +63,28 @@ if [ -n "$ADMIN_TOKEN" ]; then
                 \"value\": \"topsecretpassword\",
                 \"temporary\": false
             }]
-        }" > /dev/null 2>&1 && echo "✅ User 'traefik@example.com' created successfully" || echo "⚠️  User creation failed or may already exist"
+        }")
+
+    if [ "$HTTP_STATUS" -eq 201 ] || [ "$HTTP_STATUS" -eq 409 ]; then
+        # Get user ID
+        TRAEFIK_USER_ID=$(curl -s "${BASE_URL}/admin/realms/master/users?username=traefik" \
+            -H "Authorization: Bearer $ADMIN_TOKEN" \
+            | python3 -c "import json,sys; data=json.load(sys.stdin); print(data[0]['id']) if data else exit(1)" 2>/dev/null)
+        
+        if [ -n "$TRAEFIK_USER_ID" ]; then
+            echo "✅ User 'traefik@example.com' ready with ID: $TRAEFIK_USER_ID"
+            
+            # Export user ID for APIM deployment
+            export TRAEFIK_USER_ID
+            echo "export TRAEFIK_USER_ID=$TRAEFIK_USER_ID" > ../../traefik_apim_offline/.keycloak_vars
+            echo "🔄 Exported TRAEFIK_USER_ID variable for APIM deployment"
+            echo "🎯 Variable saved: TRAEFIK_USER_ID=$TRAEFIK_USER_ID"
+        else
+            echo "⚠️ Could not retrieve user ID for traefik@example.com"
+        fi
+    else
+        echo "⚠️ User creation failed with HTTP status: $HTTP_STATUS"
+    fi
 else
     echo "⚠️  Could not get admin token, please create client and user manually"
 fi

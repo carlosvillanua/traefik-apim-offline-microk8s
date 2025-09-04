@@ -1,0 +1,10 @@
+
+# OS generated files
+.DS_Store
+.DS_Store?
+
+# Keycloak variables
+.keycloak_vars
+
+# Temporary files
+cookies.txt
