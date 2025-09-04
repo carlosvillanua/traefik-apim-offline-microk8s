@@ -31,35 +31,11 @@ spec:
 apiVersion: hub.traefik.io/v1alpha1
 kind: ManagedApplication
 metadata:
-  name: partner-app
-  namespace: apps
-spec:
-  appId: partner-app-id
-  owner: "67f67907ee260b44336a952e"
-  apiKeys:
-    - secretName: partner-app-key
-
----
-
-apiVersion: hub.traefik.io/v1alpha1
-kind: ManagedApplication
-metadata:
   name: partner-app-jwt
   namespace: apps
 spec:
   appId: traefik
   owner: "67f67907ee260b44336a952e"
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: partner-app-key
-  namespace: apps
-type: Opaque
-data:
-  # echo -n "secret-api-key" | openssl dgst -SHAKE256 -xoflen 64 | awk '{ print $2; }' | tr -d "\n" | base64 -w0
-  key: NzJiZjE2ZGRlY2I3YTNlYzA0YjVjZTAyOTZmODVhMGFiOWQwNDkxMDUyNDNiNGI3OTI0YTM0MGYyNjUyM2U3ZDc0M2UyNDEyNmNlZDkzZTlkZGU2M2QxYjRmNzNjMjQyYzVmMGVkOTdjY2UzOTRhNWFlZTNlY2RiMzg2NmQ4NGY=
 
 ---
 apiVersion: hub.traefik.io/v1alpha1
@@ -69,7 +45,6 @@ metadata:
   namespace: apps
 spec:
   managedApplications:
-    - name: partner-app
     - name: partner-app-jwt
   apis:
     - name: weather-api

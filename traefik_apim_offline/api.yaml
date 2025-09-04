@@ -5,9 +5,8 @@ metadata:
   namespace: apps
 spec:
   isDefault: true
-#  apiKey: {}
   jwt:
-     appIdClaim: azp
+     appIdClaim: client_id
      jwksUrl: ${INTERNAL_OIDC_ISSUER}/protocol/openid-connect/certs
 ---
 apiVersion: hub.traefik.io/v1alpha1
@@ -48,22 +47,8 @@ spec:
     - web
   routes:
     - match: PathPrefix(`/weather`)
-      middlewares:
-        - name: stripprefix-weather
-          namespace: apps
       kind: Rule
       services:
         - name: weather-app
           port: 3000
 
----
-
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: stripprefix-weather
-  namespace: apps
-spec:
-  stripPrefix:
-    prefixes:
-      - /weather

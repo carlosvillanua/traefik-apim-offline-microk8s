@@ -5,8 +5,8 @@ set -e
 echo "🎯 Deploying Traefik Dashboard..."
 
 # Deploy dashboard middleware and IngressRoute
-microk8s kubectl apply -f dashboard-middleware.yaml
-microk8s kubectl apply -f dashboard-ingressroute.yaml
+microk8s kubectl apply -f ./k8s-manifests/traefik/dashboard-middleware.yaml
+microk8s kubectl apply -f ./k8s-manifests/traefik/dashboard-ingressroute.yaml
 
 echo "✅ Dashboard deployed successfully!"
 
