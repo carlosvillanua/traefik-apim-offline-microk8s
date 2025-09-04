@@ -11,7 +11,7 @@ Deploying Traefik APIM on MicroK8s brings unique advantages for edge, developer,
 - **Ultra Lightweight & Fast:** MicroK8s is optimized for minimal resources run the entire APIM stack (gateway, SSO, caching) on laptops, edge devices, VMs ...
 - **Fully Offline & Private:** All traffic, authentication, and caching occurs locally. No external cloud, SaaS, or managed services required; perfect for privacy, data sovereignty, and regulatory compliance.
 - **Portability & Replicability:** Easily clone clusters and mirror production setups anywhere. Rapid prototyping, disaster recovery, and multi-site governance all managed with k8s-native automation.
-- **Enterprise-Grade Features:** Traefik Hub delivers modern traffic management and API security, Keycloak provides robust SSO/JWT/OAuth2, and Redis enables rate limiting all integrated.
+- **Enterprise-Grade Features:** Traefik Hub delivers modern API management and security, Keycloak provides robust SSO/JWT/OAuth2, and Redis enables rate limiting all integrated.
 - **Edge & Multi-Site Ready:** Use the same architecture for on-prem, edge, IoT, or multi-cloud setups. Deploy, sync, and operate wherever reliable API management is needed.
 - **100% GitOps-Driven, No ClickOps:** Every component is deployed, updated, and managed using declarative manifests (YAML, Helm, k8s resources) and automated pipelines.
   - **No manual UI interaction or clickops:** All configuration, lifecycle, and updates are handled via version-controlled code for reproducibility, security, and automation.
