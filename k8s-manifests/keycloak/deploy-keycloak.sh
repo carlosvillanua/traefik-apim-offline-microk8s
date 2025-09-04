@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Deploying Keycloak to k3d cluster (dev-file database)..."
+echo "🚀 Deploying Keycloak to k3d cluster"
 
 # Get host IP for external access
 HOST_IP=${HOST_IP:-$(ifconfig | grep "inet " | grep -v 127.0.0.1 | head -1 | awk '{print $2}')}
